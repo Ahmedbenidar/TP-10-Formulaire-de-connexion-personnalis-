@@ -1,16 +1,6 @@
 # TP 10 — Formulaire de connexion personnalisé
 
-Médiathèque USMBA : une application Spring Boot qui remplace la page de connexion par défaut de Spring Security par un formulaire maison, entièrement en français, et qui aiguille chaque utilisateur vers l'espace correspondant à son rôle dès l'authentification réussie.
 
-Ce TP reprend le mécanisme demandé dans l'énoncé — page de connexion personnalisée, gestion des erreurs, redirection après succès, déconnexion et contrôle d'accès par rôle — mais le transpose dans un domaine métier différent et remplace la page `home` commune par un aiguillage conditionnel.
-
-## Ce que fait l'application
-
-La page d'accueil et le formulaire de connexion sont publics. Toute tentative d'ouverture d'un espace métier sans session valide est interceptée par la chaîne de filtres et renvoie vers `/connexion`. Le formulaire poste sur `/authentification` avec deux champs francisés, `identifiant` et `motDePasse`.
-
-En cas d'échec, l'utilisateur revient sur `/connexion?erreur=true` avec un message générique. En cas de succès, un `AuthenticationSuccessHandler` maison lit les autorités du compte et le dirige directement vers son tableau de bord, sans page intermédiaire. La déconnexion poste sur `/deconnexion`, invalide la session, supprime le cookie `JSESSIONID` et ramène sur `/connexion?deconnexion=true`.
-
-Quatre rôles sont définis : `LECTEUR`, `BIBLIOTHECAIRE`, `CONSERVATEUR` et `ADMIN`. Ils sont cumulatifs : un conservateur possède aussi les droits bibliothécaire et lecteur.
 
 ## Comptes de démonstration
 
@@ -100,20 +90,4 @@ La partie la plus intéressante du TP est la redirection après succès. L'énon
 
 Le formulaire lui-même ne contient aucune logique : il se contente d'afficher trois messages possibles (erreur, déconnexion, session expirée) et de poster les deux champs attendus. Le jeton CSRF est injecté automatiquement par Spring Security, sans champ caché à écrire à la main.
 
-## Personnalisation par rapport à l'énoncé
 
-L'énoncé construit un projet minimal dans le paquetage `ma.fstg.security`, avec deux comptes `admin` / `{noop}1234` et `user` / `{noop}1111`, une page `home` commune et des vues de démonstration sans contenu. La présente version s'en écarte volontairement :
-
-- le paquetage et l'artefact sont propres au projet (`ma.usmba.mediatheque` et `mediatheque-securisee`) ;
-- le domaine est une médiathèque universitaire réelle, avec un catalogue, des prêts et quatre espaces métier, plutôt que des pages vides ;
-- cinq comptes et quatre rôles hiérarchisés remplacent les deux comptes de l'énoncé ;
-- les URL et les noms des champs du formulaire sont francisés (`/connexion`, `/authentification`, `/deconnexion`, `identifiant`, `motDePasse`) ;
-- la page `home` commune est remplacée par un aiguillage automatique par rôle, ce qui illustre concrètement le point « flexibilité » de l'énoncé ;
-- BCrypt est utilisé dès le départ, sans passer par les mots de passe `{noop}` de la version intermédiaire ;
-- une page 403 dédiée a été ajoutée pour les rôles insuffisants.
-
-## Structure du projet
-
-Le code se répartit en trois paquetages. `modele` contient l'annuaire des comptes et le catalogue avec ses prêts. `config` contient la chaîne de filtres, le `UserDetailsService` et le gestionnaire de redirection. `web` contient les contrôleurs d'accueil et des quatre espaces.
-
-Les vues Thymeleaf sont dans `src/main/resources/templates`, avec un fragment partagé pour l'en-tête, la navigation et le pied de page. La feuille de style est dans `src/main/resources/static/css`.
