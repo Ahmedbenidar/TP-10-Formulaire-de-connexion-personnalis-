@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/commun :: entete('Accueil')}"></head>
+<body>
+
+<header th:replace="~{fragments/commun :: barre}"></header>
+
+<main class="page">
+
+	<div class="hero">
+		<div>
+			<span class="etiquette-role">Espace public</span>
+			<h1>La médiathèque universitaire, accessible en ligne</h1>
+			<p>
+				Consultez le catalogue, suivez vos prêts et gérez le fonds documentaire depuis un espace unique.
+				Chaque profil dispose de son propre tableau de bord, protégé par le filtre de sécurité.
+			</p>
+			<div class="boutons-hero">
+				<a class="bouton-lien" th:href="@{/connexion}">Se connecter</a>
+				<a class="bouton-lien bouton-lien--clair" th:href="@{/espace/lecteur/tableau-de-bord}">Tester un espace protégé</a>
+			</div>
+			<ul class="liste-atouts">
+				<li>Un formulaire de connexion entièrement personnalisé, hors page par défaut de Spring.</li>
+				<li>Une redirection conditionnelle : chaque rôle repart dans son espace métier.</li>
+				<li>Les mots de passe sont hachés en BCrypt, jamais conservés en clair.</li>
+			</ul>
+		</div>
+
+		<div class="carte">
+			<h3>Le fonds en un coup d'œil</h3>
+			<div class="grille-indicateurs">
+				<div class="indicateur">
+					<strong th:text="${nombreOuvrages}">6</strong>
+					<span>ouvrages référencés</span>
+				</div>
+				<div class="indicateur">
+					<strong th:text="${nombreDisponibles}">4</strong>
+					<span>disponibles au prêt</span>
+				</div>
+			</div>
+			<table>
+				<thead>
+				<tr><th>Utilisateur</th><th>Profil</th></tr>
+				</thead>
+				<tbody>
+				<tr th:each="compte : ${comptes}">
+					<td th:text="${compte.identifiant()}">lecteur</td>
+					<td th:text="${compte.rolePrincipal()}">LECTEUR</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="carte">
+		<h3>Aiguillage automatique après connexion</h3>
+		<p>
+			Contrairement à l'énoncé qui renvoie tout le monde vers une page <code>home</code> commune,
+			cette application implémente un <code>AuthenticationSuccessHandler</code> maison : le rôle du compte
+			détermine la destination finale, sans passer par une page intermédiaire.
+		</p>
+	</div>
+
+</main>
+
+<footer th:replace="~{fragments/commun :: pied}"></footer>
+
+</body>
+</html>

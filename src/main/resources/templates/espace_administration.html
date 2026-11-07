@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/commun :: entete('Administration')}"></head>
+<body>
+
+<header th:replace="~{fragments/commun :: barre}"></header>
+
+<main class="page">
+
+	<div class="entete-page">
+		<span class="etiquette-role">Rôle ADMIN</span>
+		<h1>Administration de la médiathèque</h1>
+		<p>Comptes déclarés dans le <code>UserDetailsService</code> et état du fonds.</p>
+	</div>
+
+	<div class="grille-indicateurs">
+		<div class="indicateur">
+			<strong th:text="${#lists.size(comptes)}">5</strong>
+			<span>comptes actifs</span>
+		</div>
+		<div class="indicateur">
+			<strong th:text="${nombreOuvrages}">6</strong>
+			<span>ouvrages référencés</span>
+		</div>
+	</div>
+
+	<div class="carte">
+		<h3>Comptes et rôles</h3>
+		<table>
+			<thead>
+			<tr><th>Identifiant</th><th>Nom</th><th>Fonction</th><th>Rôle principal</th></tr>
+			</thead>
+			<tbody>
+			<tr th:each="compte : ${comptes}">
+				<td th:text="${compte.identifiant()}">lecteur</td>
+				<td th:text="${compte.nomComplet()}">Nom</td>
+				<td th:text="${compte.fonction()}">Fonction</td>
+				<td><span class="badge badge--neutre" th:text="${compte.rolePrincipal()}">LECTEUR</span></td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="carte">
+		<strong>Rappel</strong>
+		<p>
+			Aucun mot de passe n'apparaît ici : l'annuaire ne conserve que les secrets saisis à la déclaration,
+			et le <code>UserDetailsService</code> n'expose que leur hash BCrypt.
+		</p>
+	</div>
+
+</main>
+
+<footer th:replace="~{fragments/commun :: pied}"></footer>
+
+</body>
+</html>

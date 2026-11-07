@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/commun :: entete('Espace prêt')}"></head>
+<body>
+
+<header th:replace="~{fragments/commun :: barre}"></header>
+
+<main class="page">
+
+	<div class="entete-page">
+		<span class="etiquette-role">Rôle BIBLIOTHECAIRE</span>
+		<h1>Service du prêt</h1>
+		<p>Suivi des emprunts en cours et des retards à relancer.</p>
+	</div>
+
+	<div class="grille-indicateurs">
+		<div class="indicateur">
+			<strong th:text="${#lists.size(prets)}">4</strong>
+			<span>prêts enregistrés</span>
+		</div>
+		<div class="indicateur">
+			<strong th:text="${enRetard}">1</strong>
+			<span>retards à relancer</span>
+		</div>
+		<div class="indicateur">
+			<strong th:text="${nombreOuvrages}">6</strong>
+			<span>ouvrages au catalogue</span>
+		</div>
+	</div>
+
+	<div class="carte">
+		<h3>Tous les prêts</h3>
+		<table>
+			<thead>
+			<tr><th>Référence</th><th>Ouvrage</th><th>Emprunteur</th><th>Échéance</th><th>État</th></tr>
+			</thead>
+			<tbody>
+			<tr th:each="pret : ${prets}">
+				<td th:text="${pret.reference()}">PR-2024-021</td>
+				<td th:text="${pret.ouvrage()}">Ouvrage</td>
+				<td th:text="${pret.emprunteur()}">Emprunteur</td>
+				<td th:text="${#temporals.format(pret.echeance(), 'dd/MM/yyyy')}">20/12/2024</td>
+				<td>
+					<span class="badge"
+						  th:classappend="${pret.etat() == 'En retard' ? 'badge--echec' : (pret.etat() == 'Rendu' ? 'badge--neutre' : 'badge--attente')}"
+						  th:text="${pret.etat()}">En cours</span>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="carte">
+		<strong>Héritage des rôles</strong>
+		<p>
+			Le compte bibliothécaire porte les rôles <code>BIBLIOTHECAIRE</code> et <code>LECTEUR</code> :
+			il accède donc aussi à l'espace lecteur, mais reste bloqué sur la conservation et l'administration.
+		</p>
+	</div>
+
+</main>
+
+<footer th:replace="~{fragments/commun :: pied}"></footer>
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/commun :: entete('Espace lecteur')}"></head>
+<body>
+
+<header th:replace="~{fragments/commun :: barre}"></header>
+
+<main class="page">
+
+	<div class="entete-page">
+		<span class="etiquette-role">Rôle LECTEUR</span>
+		<h1>Mon espace lecteur</h1>
+		<p>
+			Bonjour <strong th:text="${nomComplet}">Yasmine Berrada</strong>,
+			<span th:text="${fonction}">Étudiante</span>. Voici vos prêts en cours.
+		</p>
+	</div>
+
+	<div class="carte">
+		<h3>Mes prêts</h3>
+		<table th:unless="${#lists.isEmpty(prets)}">
+			<thead>
+			<tr><th>Référence</th><th>Ouvrage</th><th>Échéance</th><th>État</th></tr>
+			</thead>
+			<tbody>
+			<tr th:each="pret : ${prets}">
+				<td th:text="${pret.reference()}">PR-2024-021</td>
+				<td th:text="${pret.ouvrage()}">Spring Boot en pratique</td>
+				<td th:text="${#temporals.format(pret.echeance(), 'dd/MM/yyyy')}">20/12/2024</td>
+				<td>
+					<span class="badge"
+						  th:classappend="${pret.etat() == 'En cours' ? 'badge--ok' : (pret.etat() == 'En retard' ? 'badge--echec' : 'badge--neutre')}"
+						  th:text="${pret.etat()}">En cours</span>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+		<p class="vide" th:if="${#lists.isEmpty(prets)}">Aucun prêt en cours pour ce compte.</p>
+	</div>
+
+	<div class="carte">
+		<h3>Catalogue consultable</h3>
+		<table>
+			<thead>
+			<tr><th>Cote</th><th>Titre</th><th>Auteur</th><th>Catégorie</th><th>Disponibilité</th></tr>
+			</thead>
+			<tbody>
+			<tr th:each="ouvrage : ${ouvrages}">
+				<td th:text="${ouvrage.cote()}">INF-0142</td>
+				<td th:text="${ouvrage.titre()}">Titre</td>
+				<td th:text="${ouvrage.auteur()}">Auteur</td>
+				<td th:text="${ouvrage.categorie()}">Catégorie</td>
+				<td>
+					<span class="badge"
+						  th:classappend="${ouvrage.disponible() ? 'badge--ok' : 'badge--echec'}"
+						  th:text="${ouvrage.disponible() ? 'Disponible' : 'Emprunté'}">Disponible</span>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="carte">
+		<strong>Périmètre de ce profil</strong>
+		<p>
+			Le compte lecteur ne peut ouvrir que cet espace. Toute requête vers
+			<code>/espace/bibliothecaire</code>, <code>/espace/conservation</code> ou
+			<code>/espace/administration</code> est rejetée par la chaîne de filtres.
+		</p>
+	</div>
+
+</main>
+
+<footer th:replace="~{fragments/commun :: pied}"></footer>
+
+</body>
+</html>

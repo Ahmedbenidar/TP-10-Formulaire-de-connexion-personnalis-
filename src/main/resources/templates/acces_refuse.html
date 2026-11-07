@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/commun :: entete('Accès refusé')}"></head>
+<body>
+
+<header th:replace="~{fragments/commun :: barre}"></header>
+
+<main class="page">
+
+	<div class="entete-page">
+		<span class="etiquette-role">Erreur 403</span>
+		<h1>Accès refusé</h1>
+		<p>Votre profil ne dispose pas des droits nécessaires pour ouvrir cette page.</p>
+	</div>
+
+	<div class="message message--erreur">
+		La requête a été bloquée par la chaîne de filtres de Spring Security avant même d'atteindre le contrôleur.
+		Le serveur répond avec un code HTTP 403, et non par une redirection.
+	</div>
+
+	<div class="carte">
+		<h3>Que faire ?</h3>
+		<ul class="liste-atouts">
+			<li>Revenir à votre espace : <a th:href="@{/espace/lecteur/tableau-de-bord}">espace lecteur</a></li>
+			<li>Vous reconnecter avec un compte disposant du bon rôle.</li>
+			<li>Se déconnecter puis changer d'identifiant via le bouton de la barre de navigation.</li>
+		</ul>
+	</div>
+
+</main>
+
+<footer th:replace="~{fragments/commun :: pied}"></footer>
+
+</body>
+</html>

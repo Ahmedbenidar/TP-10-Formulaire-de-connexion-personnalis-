@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="entete(titre)">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title th:text="${titre} + ' — Médiathèque USMBA'">Médiathèque USMBA</title>
+	<link rel="stylesheet" th:href="@{/css/mediatheque.css}">
+</head>
+<body>
+
+<header class="site-entete" th:fragment="barre">
+	<div class="marque">
+		<div class="marque__sceau">MU</div>
+		<div class="marque__texte">
+			<strong>Médiathèque</strong>
+			<span>Université Sidi Mohamed Ben Abdellah</span>
+		</div>
+	</div>
+	<nav class="site-nav">
+		<a th:href="@{/}">Accueil</a>
+		<a sec:authorize="hasRole('ADMIN')" th:href="@{/espace/administration/tableau-de-bord}">Administration</a>
+		<a sec:authorize="hasRole('CONSERVATEUR')" th:href="@{/espace/conservation/tableau-de-bord}">Conservation</a>
+		<a sec:authorize="hasRole('BIBLIOTHECAIRE')" th:href="@{/espace/bibliothecaire/tableau-de-bord}">Prêt</a>
+		<a sec:authorize="hasRole('LECTEUR')" th:href="@{/espace/lecteur/tableau-de-bord}">Lecteur</a>
+		<a sec:authorize="isAnonymous()" th:href="@{/connexion}">Se connecter</a>
+		<form sec:authorize="isAuthenticated()" th:action="@{/deconnexion}" method="post">
+			<button type="submit" class="btn-deconnexion">Se déconnecter</button>
+		</form>
+	</nav>
+</header>
+
+<footer class="site-pied" th:fragment="pied">
+	<p>TP 10 — Formulaire de connexion personnalisé</p>
+	<p>Développement JakartaEE : Spring · comptes de démonstration uniquement</p>
+</footer>
+
+</body>
+</html>

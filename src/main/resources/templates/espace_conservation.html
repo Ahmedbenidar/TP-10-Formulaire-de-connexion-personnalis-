@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/commun :: entete('Conservation')}"></head>
+<body>
+
+<header th:replace="~{fragments/commun :: barre}"></header>
+
+<main class="page">
+
+	<div class="entete-page">
+		<span class="etiquette-role">Rôle CONSERVATEUR</span>
+		<h1>Conservation du fonds</h1>
+		<p>État de la collection et disponibilité des ouvrages.</p>
+	</div>
+
+	<div class="grille-indicateurs">
+		<div class="indicateur">
+			<strong th:text="${nombreDisponibles}">4</strong>
+			<span>ouvrages disponibles</span>
+		</div>
+		<div class="indicateur">
+			<strong th:text="${#lists.size(ouvrages)}">6</strong>
+			<span>références au fonds</span>
+		</div>
+	</div>
+
+	<div class="carte">
+		<h3>État de la collection</h3>
+		<table>
+			<thead>
+			<tr><th>Cote</th><th>Titre</th><th>Auteur</th><th>Catégorie</th><th>Disponibilité</th></tr>
+			</thead>
+			<tbody>
+			<tr th:each="ouvrage : ${ouvrages}">
+				<td th:text="${ouvrage.cote()}">INF-0142</td>
+				<td th:text="${ouvrage.titre()}">Titre</td>
+				<td th:text="${ouvrage.auteur()}">Auteur</td>
+				<td th:text="${ouvrage.categorie()}">Catégorie</td>
+				<td>
+					<span class="badge"
+						  th:classappend="${ouvrage.disponible() ? 'badge--ok' : 'badge--echec'}"
+						  th:text="${ouvrage.disponible() ? 'Disponible' : 'Emprunté'}">Disponible</span>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="carte">
+		<strong>Héritage des rôles</strong>
+		<p>
+			Le conservateur cumule <code>CONSERVATEUR</code>, <code>BIBLIOTHECAIRE</code> et
+			<code>LECTEUR</code>. Seul l'espace d'administration lui reste fermé.
+		</p>
+	</div>
+
+</main>
+
+<footer th:replace="~{fragments/commun :: pied}"></footer>
+
+</body>
+</html>
